@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="mdwiki">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>mdwiki</title>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.20/angular.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.20/angular-route.min.js"></script>
+        <script src="js/mdwiki.js"></script>
+    </head>
+    <body>
+
+        <aside class="sidebar">
+            <nav ng-controller="TreeCtrl">
+                <tree node="root" on-toggle-open="toggleOpen(dir, parent)" toggle-open-fn="toggleOpen">
+                    <span>{{node.basename}}</span>
+                </tree>
+            </nav>
+        </aside>
+
+        <div class="main" ng-view></div>
+    </body>
+</html>
+

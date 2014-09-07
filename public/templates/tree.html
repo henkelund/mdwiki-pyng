@@ -1,0 +1,12 @@
+<ul>
+    <li ng-repeat="dir in node.contents[0]" ng-class="node.subdirs[dir].isOpen ? 'open' : 'closed'">
+        <span ng-click="onToggleOpen({dir: dir, parent: node})">{{dir}}</span>
+        <tree node="node.subdirs[dir]" on-toggle-open="toggleOpenFn(dir, parent)" toggle-open-fn="toggleOpenFn">
+            <div ng-transclude></div>
+        </tree>
+    </li>
+    <li ng-repeat="file in node.contents[1]">
+        <a href="#{{node.path}}/{{file}}">{{file}}</a>
+    </li>
+</ul>
+
