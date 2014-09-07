@@ -1,0 +1,165 @@
+// =============================================================================
+//
+//  Component Syntax Highlighting
+//  Oblivion / Tango inspired color scheme
+//
+//  @version    0.0.1
+//  @package    mdwiki
+//  @author     Henrik Hedelund <henke.hedelund@gmail.com>
+//
+// =============================================================================
+
+// -----------------------------------------------------------------------------
+//  Palette:
+// -----------------------------------------------------------------------------
+$c-butter1:     #fce94f;
+$c-butter2:     #edd400;
+$c-butter3:     #c4a000;
+$c-chameleon1:  #8ae234;
+$c-chameleon2:  #73d216;
+$c-chameleon3:  #4e9a06;
+$c-orange1:     #fcaf3e;
+$c-orange2:     #f57900;
+$c-orange3:     #ce5c00;
+$c-skyblue1:    #729fcf;
+$c-skyblue2:    #3465a4;
+$c-skyblue3:    #204a87;
+$c-plum1:       #ad7fa8;
+$c-plum2:       #75507b;
+$c-plum3:       #5c3566;
+$c-chocolate1:  #e9b96e;
+$c-chocolate2:  #c17d11;
+$c-chocolate3:  #8f5902;
+$c-scarletred1: #ef2929;
+$c-scarletred2: #cc0000;
+$c-scarletred3: #a40000;
+$c-aluminium1:  #eeeeec;
+$c-aluminium2:  #d3d7cf;
+$c-aluminium3:  #babdb6;
+$c-aluminium4:  #888a85;
+$c-aluminium5:  #555753;
+$c-aluminium6:  #2e3436;
+$c-white:       #ffffff;
+
+.highlight {
+    color: $c-aluminium1;
+    background: $c-aluminium6;
+
+    // -------------------------------------------------------------------------
+    //  Generic:
+    // -------------------------------------------------------------------------
+    .ge  { font-style: italic; }                        // Emph
+    .gr  { color: $c-scarletred1; }                     // Error
+    .gh  { color: $c-aluminium2; }                      // Heading
+    .go  { color: $c-aluminium3; }                      // Output
+    .gp  { color: $c-aluminium2; }                      // Prompt
+    .gs  { font-weight: bold; }                         // Strong
+    .gu  { color: $c-plum1; font-weight: bold; }        // Subheading
+    .gt  { color: $c-scarletred1; }                     // Traceback
+    .gc  {
+        color: $c-aluminium2;
+        background-color: $c-aluminium5;
+    }
+    .gd  {                                              // Deleted
+        color: $c-aluminium6;
+        background-color: lighten($c-scarletred1, 30%);
+
+        .x {
+            color: $c-aluminium6;
+            background-color: lighten($c-scarletred1, 50%);
+        }
+    }
+    .gi  {                                              // Inserted
+        color: $c-aluminium6;
+        background-color: lighten($c-chameleon1, 20%);
+
+        .x {
+            color: $c-aluminium6;
+            background-color: lighten($c-chameleon1, 40%);
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    //  Keywords:
+    // -------------------------------------------------------------------------
+    .k   { font-weight: bold; }                         // Keyword
+    .kc  { font-weight: bold; }                         // Constant
+    .kd  { font-weight: bold; }                         // Declaration
+    .kn  { font-weight: bold; }                         // Namespace
+    .kp  { font-weight: bold; }                         // Pseudo
+    .kr  { font-weight: bold; }                         // Reserved
+    .kt  { color: $c-white; font-weight: bold; }        // Type
+
+    // -------------------------------------------------------------------------
+    //  Names:
+    // -------------------------------------------------------------------------
+    .n   { color: $c-aluminium3; }                      // Name
+    .na  { color: $c-skyblue1; }                        // Attribute
+    .nb  { color: $c-chocolate2; }                      // Builtin
+    .nc  { color: $c-white; font-weight: bold; }        // Class
+    .no  { color: $c-skyblue1; }                        // Constant
+    .ni  { color: $c-plum2; }                           // Entity
+    .nd  { color: $c-plum2; font-weight: bold; }        // Decorator
+    .ne  { color: $c-chameleon1; font-weight: bold; }   // Exception
+    .nf  { color: $c-chameleon1; font-weight: bold; }   // Function
+    .nl  { color: $c-chameleon1; font-weight: bold; }   // Label
+    .nn  { color: $c-aluminium2; }                      // Namespace
+    .nt  { color: $c-chameleon2; }                      // Tag
+    .nv  { color: $c-skyblue1; }                        // Variable
+    .bp  { color: $c-plum1; }                           // Builtin.Pseudo
+    .vc  { color: $c-skyblue1; }                        // Variable.Class
+    .vg  { color: $c-skyblue1; }                        // Variable.Global
+    .vi  { color: $c-skyblue1; }                        // Variable.Instance
+
+    // -------------------------------------------------------------------------
+    //  Operators:
+    // -------------------------------------------------------------------------
+    .o   { font-weight: bold; }                         // Operator
+    .ow  { font-weight: bold; }                         // Word
+
+    // -------------------------------------------------------------------------
+    //  Literals:
+    // -------------------------------------------------------------------------
+    .m   { color: $c-orange3; }                         // Number
+    .s   { color: $c-butter2; }                         // String
+    .mf  { color: $c-orange3; }                         // Number.Float
+    .mh  { color: $c-orange3; }                         // Number.Hex
+    .mi  { color: $c-orange3; }                         // Number.Integer
+    .mo  { color: $c-orange3; }                         // Number.Oct
+    .sb  { color: $c-butter2; }                         // String.Backtick
+    .sc  { color: $c-butter2; }                         // String.Char
+    .sd  { color: $c-aluminium4; }                      // String.Doc
+    .s2  { color: $c-butter2; }                         // String.Double
+    .se  { color: $c-butter2; }                         // String.Escape
+    .sh  { color: $c-butter2; }                         // String.Heredoc
+    .si  { color: $c-butter2; }                         // String.Interpol
+    .sx  { color: $c-butter2; }                         // String.Other
+    .sr  { color: $c-chocolate1; }                      // String.Regex
+    .s1  { color: $c-butter2; }                         // String.Single
+    .ss  { color: $c-orange2; }                         // String.Symbol
+    .il  { color: $c-orange3; }                         // Number.Integer.Long
+
+    // -------------------------------------------------------------------------
+    //  Comments:
+    // -------------------------------------------------------------------------
+    .c   { color: $c-aluminium4; font-style: italic; }  // Comment
+    .cm  { color: $c-aluminium4; font-style: italic; }  // Multiline
+    .cp  { color: $c-aluminium4; font-weight: bold; }   // Preproc
+    .c1  { color: $c-aluminium4; font-style: italic; }  // Single
+    .cs  {                                              // Special
+        color: $c-aluminium4;
+        font-weight: bold;
+        font-style: italic;
+    }
+
+    // -------------------------------------------------------------------------
+    //  Misc:
+    // -------------------------------------------------------------------------
+    .w   { color: $c-aluminium3; }                      // Text.Whitespace
+    .err {                                              // Error
+        color: $c-scarletred3;
+        background-color: $c-aluminium4;
+    }
+
+}
+
