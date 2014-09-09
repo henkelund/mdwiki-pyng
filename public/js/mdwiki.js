@@ -56,12 +56,13 @@
      *
      */
     exports.mdwiki.controller('FileCtrl',
-        ['fileService', '$scope', '$routeParams', '$sce',
-            function (fileService, $scope, $routeParams, $sce)
+        ['fileService', '$scope', '$rootScope', '$routeParams', '$sce',
+            function (fileService, $scope, $rootScope, $routeParams, $sce)
     {
         fileService.getFile($routeParams.filename).then(function (file) {
             if (file.type == 'file') {
                 $scope.contents = $sce.trustAsHtml(file.contents);
+                $rootScope.$emit('fileOpened', $routeParams.filename);
             }
         }).catch(function (errors) {
             //TODO: pass errors to message controller
@@ -74,24 +75,15 @@
      *
      */
     exports.mdwiki.controller('TreeCtrl',
-        ['fileService', '$scope',
-            function (fileService, $scope)
+        ['fileService', '$scope', '$rootScope', '$q',
+            function (fileService, $scope, $rootScope, $q)
     {
-        $scope.toggleOpen = function (dir, parent) {
+        // Function for loading directory contents
+        $scope.open = function (dir, parent) {
 
-            // Check if dir contents are already loaded
-            if (parent !== undefined
-                    && parent.subdirs !== undefined
-                    && parent.subdirs[dir] !== undefined) {
-                // Toggle openness
-                parent.subdirs[dir].isOpen = !parent.subdirs[dir].isOpen;
-                return;
-            }
-
-            // Load dir contents
             var parentPath = parent === undefined ? '' : parent.path + '/';
             var path = parentPath + dir;
-            fileService.getFile(path).then(function (node) {
+            return fileService.getFile(path).then(function (node) {
                 if (node.type == 'dir') {
                     node.path = path;
                     if (parent === undefined) {
@@ -103,13 +95,64 @@
                         parent.subdirs[dir] = node;
                     }
                     node.isOpen = true;
+                    return node;
+                } else {
+                    return $q.reject([path + ' is not a directory']);
                 }
             }).catch(function (errors) {
                 //TODO: pass errors to message controller
                 console.log(errors);
             });
         };
-        $scope.toggleOpen('');
+
+        // Function for recursively opening a path
+        $scope.openPath = function (path, parent) {
+            if (parent === undefined) {
+                parent = $scope.root;
+            }
+            var segments = path.split('/');
+            var segment = segments.shift();
+            if (segment == '') {
+                return;
+            }
+            if (parent.subdirs !== undefined
+                    && parent.subdirs[segment] !== undefined) {
+                parent.subdirs[segment].isOpen = true;
+                $scope.openPath(segments.join('/'), parent.subdirs[segment]);
+            } else {
+                $scope.open(segment, parent).then(function (node) {
+                    $scope.openPath(segments.join('/'), node);
+                });
+            }
+        }
+
+        // Function called from tree directive to expand / collapse directories
+        $scope.toggleOpen = function (dir, parent) {
+
+            // Check if dir contents are already loaded
+            if (parent !== undefined
+                    && parent.subdirs !== undefined
+                    && parent.subdirs[dir] !== undefined) {
+                // Toggle openness
+                parent.subdirs[dir].isOpen = !parent.subdirs[dir].isOpen;
+            } else {
+                // Not yet loaded -> call backend
+                $scope.open(dir, parent);
+            }
+        };
+
+        // Load root directory
+        $scope.open('').then(function () {
+            // Subscribe to file load event once root dir has opened
+            $rootScope.$on('fileOpened', function (evt, filename) {
+                $scope.openPath(
+                    filename
+                        .replace(/\/[^\/]+$/, '') // trim basename
+                        .replace(/^\//, '')       // and leading slash
+                );
+            });
+        });
+
     }]);
 
     /**
