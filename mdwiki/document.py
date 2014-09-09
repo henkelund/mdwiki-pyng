@@ -4,6 +4,7 @@
 
 from os import walk, sep as pathsep
 from os.path import isfile, isdir, dirname, basename
+import re
 from markdown import render_markdown
 
 __author__ = 'Henrik Hedelund'
@@ -61,10 +62,13 @@ class Document:
         ftype = self.get_type()
         if ftype == self.TYPE_DIR:
             entries = []
+            mdpattern = re.compile(r'\.md$', re.IGNORECASE)
             for (dirpath, dirnames, filenames) in \
                     walk(self.get_filename(), True, self._walk_err):
                 entries.append(dirnames)
-                entries.append(filenames)
+                entries.append(
+                    [fname for fname in filenames
+                        if mdpattern.search(fname)])
                 break;
             return entries
         elif ftype == self.TYPE_FILE:
