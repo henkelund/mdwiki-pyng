@@ -185,5 +185,16 @@
         };
     }]);
 
+    /**
+     * Filter removing .md extension from file names
+     *
+     */
+    exports.mdwiki.filter('stripExtension', function ()
+    {
+        return function (filename) {
+            return filename.replace(/\.md$/i, '');
+        };
+    });
+
 })(window, angular);
 
