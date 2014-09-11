@@ -20,6 +20,9 @@ config(allow_no_value=True).load('config/*.cfg')
 def get_file(path=''):
     """File controller"""
     basepath = config().value('documents_path', 'documents')
-    doc = Document(join(basepath, path))
+    doc = Document(
+        join(basepath, path),
+        filepattern=r'\.md$'
+    )
     return jsonify(doc.as_dict())
 

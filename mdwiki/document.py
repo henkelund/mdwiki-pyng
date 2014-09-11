@@ -19,9 +19,12 @@ class Document:
     TYPE_DIR  = 'dir'
     TYPE_NONE = None
 
-    def __init__(self, filename=None):
+    def __init__(self, filename=None, **kwargs):
         """Initializes a Document instance from a file path"""
         self._errors = []
+        self._filepattern = re.compile(kwargs['filepattern'], re.IGNORECASE) \
+            if 'filepattern' in kwargs else None
+        self._filename = None
         if not filename is None:
             self.set_filename(filename)
 
@@ -31,7 +34,15 @@ class Document:
 
     def set_filename(self, filename):
         """Set the file name of this document"""
-        self._filename = filename.rstrip(pathsep)
+        if self._filepattern is None \
+                or self._filepattern.search(filename) \
+                or isdir(filename):
+            self._filename = filename.rstrip(pathsep)
+        else:
+            self._errors.append(
+                'Unsupported file type: %s' \
+                    % basename(filename))
+        return self
 
     def get_filename(self):
         """Get the file name of this document"""
@@ -51,41 +62,50 @@ class Document:
 
     def get_type(self):
         """Get this documents type of file"""
-        if isfile(self._filename):
+        if self._filename is None:
+            return self.TYPE_NONE
+        elif isfile(self._filename):
             return self.TYPE_FILE
         elif isdir(self._filename):
             return self.TYPE_DIR
         return self.TYPE_NONE
 
+    def get_raw_file_contents(self):
+        """Get contents of this Document if it is a file, None otherwise"""
+        try:
+            with open(self._filename) as fh:
+                return fh.read()
+        except IOError as e:
+            self._errors.append(str(e))
+        return None
+
+    def get_file_contents(self):
+        """Get processed contents of this Documents if it is a file"""
+        text = self.get_raw_file_contents()
+        if text is not None:
+            return render_markdown(text)
+        return None
+
     def get_contents(self):
         """Get the contents of this document"""
         ftype = self.get_type()
         if ftype == self.TYPE_DIR:
-            entries = []
-            mdpattern = re.compile(r'\.md$', re.IGNORECASE)
             for (dirpath, dirnames, filenames) in \
                     walk(self.get_filename(), True, self._walk_err):
-                entries.append(dirnames)
-                entries.append(
+                return (
+                    dirnames,
                     [fname for fname in filenames
-                        if mdpattern.search(fname)])
-                break;
-            return entries
+                        if self._filepattern is None \
+                            or self._filepattern.search(fname)]
+                )
+            return ((), ())
         elif ftype == self.TYPE_FILE:
-            try:
-                with open(self.get_filename()) as fh:
-                    return self._parse_contents(fh.read())
-            except IOError as e:
-                self._errors.append(str(e))
+            return self.get_file_contents()
         return None
 
     def _walk_err(self, err):
         """os.walk error callback"""
         self._errors.append(str(err))
-
-    def _parse_contents(self, contents):
-        """Parse file contents"""
-        return render_markdown(contents)
 
     def as_dict(self):
         """Return a dict representation of this document"""
