@@ -7,6 +7,7 @@ from os.path import abspath, join
 from flask import Flask
 import config as default_config
 from document import Document
+from markdown import MarkdownHtmlRenderer
 
 __author__ = 'Henrik Hedelund'
 __copyright__ = 'Copyright 2014, Henrik Hedelund'
@@ -29,9 +30,16 @@ class Factory:
         return cls._app
 
     @classmethod
-    def get_mddoc(cls, path=''):
+    def get_mddoc(cls, path='', **kwargs):
         """Create a Markdown document from given path"""
-        basepath = cls.get_app().config['DOCUMENTS_PATH']
-        kwargs = {'filepattern': r'\.md$'}
+        config = cls.get_app().config
+        basepath = config['DOCUMENTS_PATH']
+        if not 'file_pattern' in kwargs:
+            kwargs['file_pattern'] = r'\.md$'
+        if not 'content_renderer' in kwargs:
+            kwargs['content_renderer'] = MarkdownHtmlRenderer(
+                config['MD_EXTENSIONS'],
+                config['MD_HTML_FLAGS']
+            ).render
         return Document(join(basepath, path), **kwargs)
 

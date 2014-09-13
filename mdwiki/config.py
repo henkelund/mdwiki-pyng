@@ -9,4 +9,15 @@ __email__ = 'henke.hedelund@gmail.com'
 
 DEBUG = False
 DOCUMENTS_PATH = 'documents'
+MD_EXTENSIONS = (
+    'no-intra-emphasis',
+    'tables',
+    'fenced-code',
+    'strikethrough',
+    'space-headers',
+    'superscript'
+)
+MD_HTML_FLAGS = (
+    'toc',
+)
 

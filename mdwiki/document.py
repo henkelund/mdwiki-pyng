@@ -5,7 +5,6 @@
 from os import walk, sep as pathsep
 from os.path import isfile, isdir, dirname, basename
 import re
-from markdown import render_markdown
 
 __author__ = 'Henrik Hedelund'
 __copyright__ = 'Copyright 2014, Henrik Hedelund'
@@ -22,8 +21,10 @@ class Document:
     def __init__(self, filename=None, **kwargs):
         """Initializes a Document instance from a file path"""
         self._errors = []
-        self._filepattern = re.compile(kwargs['filepattern'], re.IGNORECASE) \
-            if 'filepattern' in kwargs else None
+        self._file_pattern = re.compile(kwargs['file_pattern'], re.IGNORECASE) \
+            if 'file_pattern' in kwargs else None
+        self._content_renderer = kwargs['content_renderer'] \
+            if 'content_renderer' in kwargs else None
         self._filename = None
         if not filename is None:
             self.set_filename(filename)
@@ -34,11 +35,12 @@ class Document:
 
     def set_filename(self, filename):
         """Set the file name of this document"""
-        if self._filepattern is None \
-                or self._filepattern.search(filename) \
+        if self._file_pattern is None \
+                or self._file_pattern.search(filename) \
                 or isdir(filename):
             self._filename = filename.rstrip(pathsep)
         else:
+            self._filename = None
             self._errors.append(
                 'Unsupported file type: %s' \
                     % basename(filename))
@@ -82,9 +84,9 @@ class Document:
     def get_file_contents(self):
         """Get processed contents of this Documents if it is a file"""
         text = self.get_raw_file_contents()
-        if text is not None:
-            return render_markdown(text)
-        return None
+        if text is not None and self._content_renderer is not None:
+            text = self._content_renderer(text, self.get_basename())
+        return text
 
     def get_contents(self):
         """Get the contents of this document"""
@@ -95,8 +97,8 @@ class Document:
                 return (
                     dirnames,
                     [fname for fname in filenames
-                        if self._filepattern is None \
-                            or self._filepattern.search(fname)]
+                        if self._file_pattern is None
+                            or self._file_pattern.search(fname)]
                 )
             return ((), ())
         elif ftype == self.TYPE_FILE:
