@@ -20,4 +20,5 @@ MD_EXTENSIONS = (
 MD_HTML_FLAGS = (
     'toc',
 )
+SEARCH_LIMIT = 10
 

@@ -7,9 +7,11 @@ Small Python / AngularJS powered Markdown wiki
 - [Flask](http://flask.pocoo.org/) web framework ```~# pip install flask```
 - [Misaka](http://misaka.61924.nl/) Markdown parser ```~# pip install misaka```
 - [Pygments](http://pygments.org/) syntax highlighter ```~# pip install pygments```
+- [Whoosh](https://pythonhosted.org/Whoosh/) search engine ```~# pip install whoosh```
 
 ## Webserver configuration
 Sample nginx configuration with uWSGI upstream server. If a file is found in the *public* directory it sould be served, otherwise the request should be passed upstream.
+
 ```nginx
 server {
     listen 80;
@@ -25,7 +27,7 @@ server {
     location @mdwiki {
         include /etc/nginx/uwsgi_params;
         uwsgi_param UWSGI_MODULE mdwiki;
-        uwsgi_param UWSGI_CALLABLE "app";
+        uwsgi_param UWSGI_CALLABLE app;
         uwsgi_param UWSGI_PYHOME $document_root;
         uwsgi_param UWSGI_CHDIR $document_root;
         uwsgi_modifier1 30;
@@ -33,3 +35,4 @@ server {
     }
 }
 ```
+

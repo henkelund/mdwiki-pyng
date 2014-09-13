@@ -4,6 +4,7 @@
 
 from flask import jsonify
 from factory import Factory
+from search import MarkdownSearcher
 
 __author__ = 'Henrik Hedelund'
 __copyright__ = 'Copyright 2014, Henrik Hedelund'
@@ -18,4 +19,10 @@ def get_file(path=''):
     """File controller"""
     doc = Factory.get_mddoc(path)
     return jsonify(doc.as_dict())
+
+@app.route('/search/<path:query>')
+def get_search_result(query):
+    """Search controller"""
+    result = MarkdownSearcher().search(query + '*')
+    return jsonify({'hits': result})
 
