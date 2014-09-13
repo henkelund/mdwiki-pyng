@@ -147,8 +147,8 @@
             $rootScope.$on('fileOpened', function (evt, filename) {
                 $scope.openPath(
                     filename
-                        .replace(/\/[^\/]+$/, '') // trim basename
-                        .replace(/^\//, '')       // and leading slash
+                        .replace(/(^|\/)[^\/]+$/, '') // trim basename
+                        .replace(/^\//, '')           // and leading slash
                 );
             });
         });
