@@ -37,7 +37,7 @@ server {
 ```
 
 ## Searching
-*mdwiki* provides a command line interface for building the *Whoosh* search index. It's important to execute the reindex command from the application root folder since the index is stored relateive to the current working directory.
+*mdwiki* provides a command line interface for building the *Whoosh* search index. It's important to execute the reindex command from the application root folder since the index is stored relative to the current working directory.
 
 ```sh
 $ cd /path/to/mdwiki
