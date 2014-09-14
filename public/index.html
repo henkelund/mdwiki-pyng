@@ -16,6 +16,15 @@
                     <span>{{node.basename}}</span>
                 </tree>
             </nav>
+            <div ng-controller="SearchCtrl" class="search">
+                <input ng-model="query" ng-change="search(query)" type="text" placeholder="Search.." />
+                <ul ng-show="query.length >= minQueryLength">
+                    <li ng-repeat="hit in hits">
+                        <a href="#{{hit.file}}">{{hit.title}}</a>
+                        <p ng-bind-html="hit.safeHighlights"></p>
+                    </li>
+                </ul>
+            </div>
         </aside>
 
         <div class="main" ng-view></div>

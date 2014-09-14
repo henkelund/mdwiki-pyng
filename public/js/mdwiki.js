@@ -26,8 +26,7 @@
      *
      */
     exports.mdwiki.factory('fileService',
-        ['$http', '$sce', '$q',
-            function ($http, $sce, $q)
+        ['$http', '$q', function ($http, $q)
     {
         var fileService = {
 
@@ -49,6 +48,26 @@
 
         };
         return fileService;
+    }]);
+
+    /**
+     * Search Service Factory
+     *
+     */
+    exports.mdwiki.factory('searchService',
+        ['$http', function ($http)
+    {
+        var searchService = {
+
+            search: function (query) {
+                var promise = $http.get('/search/' + query)
+                    .then(function (transport) {
+                        return transport.data;
+                    });
+                return promise;
+            }
+        };
+        return searchService;
     }]);
 
     /**
@@ -153,6 +172,53 @@
             });
         });
 
+    }]);
+
+    /**
+     * Search Controller
+     *
+     */
+    exports.mdwiki.controller('SearchCtrl',
+        ['searchService', '$scope', '$sce',
+            function (searchService, $scope, $sce)
+    {
+        $scope.minQueryLength = 3;
+        $scope.nextQuery = false;
+
+        // Search function trying to prevent concurrent service calls
+        $scope.serviceSearch = function (query) {
+            if ($scope.nextQuery !== false) {
+                $scope.nextQuery = query;
+                return;
+            }
+            $scope.nextQuery = query;
+            searchService.search(query).then(function (result) {
+
+                for (var i = 0; i < result.hits.length; ++i) {
+                    result.hits[i].safeHighlights =
+                        $sce.trustAsHtml(result.hits[i].highlights);
+                }
+                $scope.hits = result.hits;
+
+            }).catch(function (errors) {
+                //TODO: pass errors to message controller
+                console.log(errors);
+            }).finally(function () {
+                var nextQuery = $scope.nextQuery;
+                $scope.nextQuery = false;
+                if (nextQuery != query) {
+                    $scope.serviceSearch(nextQuery);
+                }
+            });
+        };
+
+        // ngChange callback for search input
+        $scope.search = function (query) {
+            query = query.replace(/(^\s+)|(\s+$)/, '');
+            if (query.length >= $scope.minQueryLength) {
+                $scope.serviceSearch(query);
+            }
+        };
     }]);
 
     /**
