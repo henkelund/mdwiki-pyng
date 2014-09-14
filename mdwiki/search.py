@@ -10,7 +10,6 @@ import whoosh.analysis
 import whoosh.qparser
 import misaka as m
 from flask import Markup
-from factory import Factory
 
 __author__ = 'Henrik Hedelund'
 __copyright__ = 'Copyright 2014, Henrik Hedelund'
@@ -140,19 +139,16 @@ class MarkdownIndexer:
             writer.add_document(**record)
         writer.commit()
 
-    def reindex_all(self):
-        """Reindex all documents"""
-        index = self.get_index(True)
-        root = Factory.get_mddoc()
-        self.index_document(root)
-        index.optimize()
-
 class MarkdownSearcher:
     """Markdown document search class"""
 
-    def __init__(self):
+    def __init__(self, **kwargs):
         """Initialize index instance"""
         self._index = MarkdownIndexer().get_index()
+        self._base_path = kwargs['base_path'] \
+            if 'base_path' in kwargs else None
+        self._default_limit = kwargs['default_limit'] \
+            if 'default_limit' in kwargs else None
 
     def _get_searcher(self):
         """Retrieve searcher instance"""
@@ -167,26 +163,27 @@ class MarkdownSearcher:
             group=whoosh.qparser.OrGroup.factory(0.9)
         )
 
-    def search(self, text):
+    def _get_base_path_pattern(self):
+        """Get base path pattern to strip from search hits"""
+        if self._base_path is not None:
+            return '^%s' % re.escape(self._base_path)
+        return None
+
+    def search(self, text, **kwargs):
         """Search for documents matching given text"""
         results = []
-        config = Factory.get_app().config
-        path_pattern = '^%s' % re.escape(config['DOCUMENTS_PATH'])
+        path_pattern = self._get_base_path_pattern()
+        if not 'limit' in kwargs and self._default_limit is not None:
+            kwargs['limit'] = self._default_limit
         query = self._get_query_parser().parse(unicode(text))
         with self._get_searcher() as searcher:
-            for hit in searcher.search(query, limit=config['SEARCH_LIMIT']):
+            for hit in searcher.search(query, **kwargs):
+                filename = re.sub(path_pattern, '', hit['path'], 1) \
+                    if path_pattern is not None else hit['path']
                 results.append({
                     'title':      hit['title'],
-                    'file':       re.sub(path_pattern, '', hit['path'], 1),
+                    'file':       filename,
                     'highlights': hit.highlights('content')
                 })
         return results
-
-if __name__ == '__main__':
-    """~$ python mdwiki/search.py reindex"""
-    import sys
-    args = sys.argv[1:]
-    if len(args) > 0:
-        if args[0] == 'reindex':
-            MarkdownIndexer().reindex_all()
 
