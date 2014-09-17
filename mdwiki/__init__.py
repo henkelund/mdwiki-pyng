@@ -24,5 +24,8 @@ def get_search_result(query):
     """Search controller"""
     searcher = Factory.get_searcher()
     result = searcher.search(query + '*')
-    return jsonify({'hits': result})
+    return jsonify({
+        'hits': result,
+        'correction': searcher.correct(query)
+    })
 

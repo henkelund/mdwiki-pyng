@@ -200,6 +200,14 @@
                 }
                 $scope.hits = result.hits;
 
+                var correction = result.correction;
+                if (correction !== undefined && correction) {
+                    $scope.correction = correction.replace(/<[^>]+>/gm, '');
+                    $scope.safeCorrection = $sce.trustAsHtml(correction);
+                } else {
+                    $scope.correction = false;
+                }
+
             }).catch(function (errors) {
                 //TODO: pass errors to message controller
                 console.log(errors);

@@ -18,6 +18,10 @@
             </nav>
             <div ng-controller="SearchCtrl" class="search">
                 <input ng-model="query" ng-change="search(query)" type="text" placeholder="Search.." />
+                <div ng-show="correction && query.length" class="correction">
+                    Search for
+                    <a href="javascript:void(0)" ng-click="query = correction; search(query)" ng-bind-html="safeCorrection"></a>
+                </div>
                 <ul ng-show="query.length >= minQueryLength">
                     <li ng-repeat="hit in hits">
                         <a href="#{{hit.file}}">{{hit.title}}</a>

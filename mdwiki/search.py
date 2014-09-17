@@ -8,6 +8,7 @@ import whoosh.index
 import whoosh.fields
 import whoosh.analysis
 import whoosh.qparser
+import whoosh.highlight
 import misaka as m
 from flask import Markup
 
@@ -68,6 +69,7 @@ class MarkdownIndexer:
         return whoosh.fields.Schema(
             title=whoosh.fields.TEXT(
                 stored=True,
+                spelling=True,
                 field_boost=2.0
             ),
             path=whoosh.fields.ID(
@@ -75,6 +77,7 @@ class MarkdownIndexer:
             ),
             content=whoosh.fields.TEXT(
                 stored=True,
+                spelling=True,
                 analyzer=whoosh.analysis.StemmingAnalyzer()
             )
         )
@@ -186,4 +189,14 @@ class MarkdownSearcher:
                     'highlights': hit.highlights('content')
                 })
         return results
+
+    def correct(self, text):
+        """Get corrected text or None if already correct"""
+        with self._get_searcher() as searcher:
+            query = self._get_query_parser().parse(unicode(text))
+            correction = searcher.correct_query(query, unicode(text))
+            if correction.query != query:
+                formatter = whoosh.highlight.HtmlFormatter()
+                return correction.format_string(formatter)
+        return None
 
