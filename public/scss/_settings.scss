@@ -1,0 +1,123 @@
+// =============================================================================
+//
+//  Base Settings
+//
+//  @version    0.0.1
+//  @package    mdwiki
+//  @author     Henrik Hedelund <henke.hedelund@gmail.com>
+//
+// =============================================================================
+
+// -----------------------------------------------------------------------------
+//  Base:
+// -----------------------------------------------------------------------------
+
+$base-fontsize:             10px;
+$base-lineheight:           10px;
+$base-radius:               0;
+$base-margin:               $base-fontsize * 2;
+$base-padding:              $base-fontsize * 2;
+
+// -----------------------------------------------------------------------------
+//  Colors:
+// -----------------------------------------------------------------------------
+
+// Grayscale
+
+$black:                         #000 !default;
+$gray-darker:                   #222 !default;
+$gray-dark:                     #333 !default;
+$gray-dark-light:               #ddd !default;
+$gray:                          #555 !default;
+$gray-light:                    #999 !default;
+$gray-lighter:                  #eee !default;
+$white:                         #fff !default;
+
+// Link Colors:
+
+$color-link:                    $black;
+$color-link-hover:              $gray-light;
+$color-link-active:             $color-link-hover;
+$color-link-focus:              $color-link-hover;
+
+$color-text:                    $gray-dark;
+$color-border:                  $gray-lighter;
+
+// -----------------------------------------------------------------------------
+//  Typography:
+// -----------------------------------------------------------------------------
+
+// Settings:
+
+$font-use-em:                   false;
+$font-size:                     $base-fontsize;
+$font-margin:                   $base-margin;
+
+// Fonts:
+
+$font-sans:                     'Cantarell', sans-serif;
+$font-sans-weight:              200;
+$font-sans-style:               normal;
+$font-sans-color:               $color-text;
+
+$font-serif:                    Georgia, 'Times New Roman', Times, serif;
+$font-serif-weight:             normal;
+$font-serif-style:              normal;
+$font-serif-color:              $color-text;
+
+$font-mono:                     Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+$font-mono-weight:              normal;
+$font-mono-style:               normal;
+$font-mono-color:               $color-text;
+
+$font-body:                     $font-sans;
+$font-body-weight:              400;
+$font-body-style:               normal;
+$font-body-color:               $color-text;
+
+$font-body-bold:                $font-sans;
+$font-body-bold-weight:         700;
+$font-body-bold-style:          normal;
+$font-body-bold-color:          $color-text;
+
+$font-heading:                  $font-sans;
+$font-heading-weight:           700;
+$font-heading-style:            normal;
+$font-heading-color:            $color-text;
+$font-heading-transform:        none;
+
+$font-input:                    $font-sans;
+$font-input-weight:             normal;
+$font-input-style:              normal;
+$font-input-color:              $color-text;
+$font-input-transform:          none;
+
+$font-button:                   $font-sans;
+$font-button-weight:            normal;
+$font-button-style:             normal;
+$font-button-color:             $color-text;
+$font-button-transform:         none;
+
+// Font Sizes:
+
+$fontsize-micro:                11;
+$lineheight-micro:              12;
+
+$fontsize-mini:                 12;
+$lineheight-mini:               14;
+
+$fontsize-small:                14;
+$lineheight-small:              18;
+
+$fontsize-normal:               16;
+$lineheight-normal:             24;
+
+$fontsize-medium:               18;
+$lineheight-medium:             22;
+
+$fontsize-large:                22;
+$lineheight-large:              28;
+
+$fontsize-huge:                 36;
+$lineheight-huge:               42;
+

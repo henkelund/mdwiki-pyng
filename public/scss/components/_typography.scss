@@ -1,0 +1,281 @@
+// =============================================================================
+//
+//  Component Typography
+//
+//  @version    0.0.1
+//  @package    mdwiki
+//  @author     Henrik Hedelund <henke.hedelund@gmail.com>
+//
+// =============================================================================
+
+// -----------------------------------------------------------------------------
+//  Custom Fonts:
+// -----------------------------------------------------------------------------
+
+@font-face {
+    font-family: 'Cantarell';
+    font-style: normal;
+    font-weight: 400;
+    src:
+        url('font/Cantarell/Cantarell-Regular.woff') format('woff'),
+        url('font/Cantarell/Cantarell-Regular.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'Cantarell';
+    font-style: normal;
+    font-weight: 700;
+    src:
+        url('font/Cantarell/Cantarell-Bold.woff') format('woff'),
+        url('font/Cantarell/Cantarell-Bold.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'Cantarell';
+    font-style: italic;
+    font-weight: 400;
+    src:
+        url('font/Cantarell/Cantarell-Oblique.woff') format('woff'),
+        url('font/Cantarell/Cantarell-Oblique.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'Cantarell';
+    font-style: italic;
+    font-weight: 700;
+    src:
+        url('font/Cantarell/Cantarell-BoldOblique.woff') format('woff'),
+        url('font/Cantarell/Cantarell-BoldOblique.ttf') format('truetype');
+}
+
+// -----------------------------------------------------------------------------
+//  Resets and Standards:
+// -----------------------------------------------------------------------------
+
+html {
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+    font-size: 100%;
+}
+
+body {
+    color: $color-text;
+    font-size: $font-size;
+    line-height: 1;
+    margin: 0;
+    position: relative;
+    -webkit-font-smoothing: antialiased;
+    moz-osx-font-smoothing: grayscale;
+
+    @include get-font('body');
+}
+
+// -----------------------------------------------------------------------------
+//  Links:
+// -----------------------------------------------------------------------------
+
+a {
+    color: $color-link;
+    line-height: inherit;
+    text-decoration: none;
+
+    &:hover {
+        color: $color-link-hover;
+    }
+    &:active {
+        color: $color-link-active;
+        outline: none;
+    }
+    &:focus {
+        color: $color-link-focus;
+        outline: none;
+    }
+}
+
+// -----------------------------------------------------------------------------
+//  Headings:
+// -----------------------------------------------------------------------------
+
+h1, h2, h3, h4, h5, h6 {
+    color: $font-heading-color;
+    line-height: 1.2em;
+
+    @include get-font('heading');
+}
+
+h1,
+.as-h1 {
+    margin: 0.67em 0;
+
+    @include get-font-size('huge');
+}
+
+h2,
+.as-h2 {
+    margin: 0.9090909em 0;
+
+    @include get-font-size('large');
+}
+
+h3,
+.as-h3 {
+    margin: 1em 0;
+    @include get-font-size('medium');
+}
+
+h4,
+.as-h4 {
+    margin: 1.5em 0;
+
+    @include get-font-size('normal');
+}
+
+h5,
+.as-h5 {
+    margin: 2em 0;
+
+    @include get-font-size('small');
+}
+
+h6,
+.as-h6 {
+    margin: 2em 0;
+
+    @include get-font-size('mini');
+}
+
+// -----------------------------------------------------------------------------
+//  Text:
+// -----------------------------------------------------------------------------
+
+p {
+    margin: 1em 0;
+
+    @include get-font-size();
+
+    small {
+        font-size: 0.7em;
+        line-height: 1.2em;
+    }
+
+    code,
+    kbd,
+    pre,
+    samp {
+        display: inline;
+        font-size: 0.875em;
+        margin: 0;
+    }
+
+    &.mini { @include get-font-size('mini'); }
+    &.small { @include get-font-size('small'); }
+    &.lead { @include get-font-size('large'); }
+}
+
+b,
+strong {
+    @include get-font('body-bold');
+}
+
+blockquote {
+    margin: 1em 40px;
+}
+
+pre {
+    white-space: pre;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+kbd,
+pre,
+samp {
+    display: block;
+    margin: 0;
+    @include get-font('mono', 'small', true);
+}
+code {
+    background-color: $gray-lighter;
+    border-radius: 3px;
+    border: 1px solid $color-border;
+    @include get-font('mono', 'small', true);
+}
+
+sub,
+sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+}
+
+sup {
+    top: -0.5em;
+}
+
+sub {
+    bottom: -0.25em;
+}
+
+abbr[title] {
+    border-bottom: 1px dotted;
+}
+
+dfn {
+    font-style: italic;
+}
+
+mark {
+    background: #ff0;
+    color: #000;
+}
+
+q {
+    quotes: none;
+}
+
+q:before,
+q:after {
+    content: '';
+    content: none;
+}
+
+// -----------------------------------------------------------------------------
+//  Lists:
+// -----------------------------------------------------------------------------
+
+dl,
+menu,
+ol,
+ul {
+    margin: 1em 0;
+
+    @include get-font-size();
+}
+
+li {
+    @include inherit-font-size();
+}
+
+dd {
+    margin: 0 0 0 40px;
+}
+
+menu,
+ol,
+ul {
+    padding: 0 0 0 40px;
+}
+
+ol,
+ul {
+    ol,
+    ul,
+    p,
+    label {
+        @include inherit-font-size();
+    }
+}
+
+nav ul,
+nav ol {
+    list-style-image: none;
+    list-style: none;
+}
+
