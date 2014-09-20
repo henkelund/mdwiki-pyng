@@ -16,8 +16,9 @@
     {
         $routeProvider.
             when('/:filename*', {
-                template   : '<div ng-bind-html="contents"></div>',
-                controller : 'FileCtrl'
+                template: '<div ng-bind-html="contents"></div>',
+                controller: 'FileCtrl',
+                reloadOnSearch: false
             });
     }]);
 
@@ -81,7 +82,9 @@
         fileService.getFile($routeParams.filename).then(function (file) {
             if (file.type == 'file') {
                 $scope.contents = $sce.trustAsHtml(file.contents);
-                $rootScope.$emit('fileOpened', $routeParams.filename);
+                $scope.$$postDigest(function () {
+                    $rootScope.$emit('fileOpened', $routeParams.filename);
+                });
             }
         }).catch(function (errors) {
             //TODO: pass errors to message controller
@@ -227,6 +230,35 @@
                 $scope.serviceSearch(query);
             }
         };
+    }]);
+
+    /**
+     * Table of Contents Controller
+     *
+     */
+    exports.mdwiki.controller('TocCtrl',
+        ['$scope', '$rootScope', function ($scope, $rootScope)
+    {
+        $scope.toc = [];
+
+        $scope.buildToc = function (baseUrl) {
+            $scope.toc = [];
+            var headings = document.querySelectorAll('[id^="toc_"]');
+            for (var i = 0; i < headings.length; ++i) {
+                var heading = ng.element(headings[i]);
+                var levelMatch = heading.prop('tagName').match(/\d+$/);
+                $scope.toc.push({
+                    url: baseUrl + '#' + heading.attr('id'),
+                    level: levelMatch ? parseInt(levelMatch[0]) : 7,
+                    title: heading.text()
+                });
+            }
+        };
+
+        $rootScope.$on('fileOpened', function (evt, filename) {
+            $scope.buildToc('#/' + filename);
+            $scope.$apply();
+        });
     }]);
 
     /**

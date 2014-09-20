@@ -16,6 +16,11 @@
                     <span>{{node.basename}}</span>
                 </tree>
             </nav>
+            <ol ng-controller="TocCtrl">
+                <li ng-repeat="heading in toc" class="level-{{heading.level}}">
+                    <a href="{{heading.url}}">{{heading.title}}</a>
+                </li>
+            </ol>
             <div ng-controller="SearchCtrl" class="search">
                 <input ng-model="query" ng-change="search(query)" type="text" placeholder="Search.." />
                 <div ng-show="correction && query.length" class="correction">
