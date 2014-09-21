@@ -233,6 +233,26 @@
     }]);
 
     /**
+     * Breadcrumbs Controller
+     *
+     */
+    exports.mdwiki.controller('BreadcrumbsCtrl',
+        ['$scope', '$rootScope', function ($scope, $rootScope)
+    {
+        $scope.path = [];
+        $scope.filename = false;
+
+        $rootScope.$on('fileOpened', function (evt, filename) {
+            var segments = filename.split('/');
+            $scope.filename = segments.length > 0
+                ? segments.pop()
+                : false;
+            $scope.path = segments;
+            $scope.$apply();
+        });
+    }]);
+
+    /**
      * Table of Contents Controller
      *
      */

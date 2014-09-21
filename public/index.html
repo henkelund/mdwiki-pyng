@@ -10,18 +10,33 @@
     </head>
     <body>
 
+        <header class="topbar">
+            <nav ng-controller="BreadcrumbsCtrl" class="breadcrumbs">
+                <ul ng-if="filename">
+                    <li class="dir" ng-repeat="dir in path">
+                        {{dir}}
+                    </li>
+                    <li class="file">
+                        {{filename|stripExtension}}
+                    </li>
+                </ul>
+            </nav>
+            <nav ng-controller="TocCtrl" class="toc">
+                <ul>
+                    <li ng-repeat="heading in toc" class="level-{{heading.level}}">
+                        <a href="{{heading.url}}">{{heading.title}}</a>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+
         <aside class="sidebar">
-            <nav ng-controller="TreeCtrl">
+            <nav ng-controller="TreeCtrl" class="tree">
                 <tree node="root" on-toggle-open="toggleOpen(dir, parent)" toggle-open-fn="toggleOpen">
                     <span>{{node.basename}}</span>
                 </tree>
             </nav>
-            <ol ng-controller="TocCtrl">
-                <li ng-repeat="heading in toc" class="level-{{heading.level}}">
-                    <a href="{{heading.url}}">{{heading.title}}</a>
-                </li>
-            </ol>
-            <div ng-controller="SearchCtrl" class="search">
+            <nav ng-controller="SearchCtrl" class="search">
                 <input ng-model="query" ng-change="search(query)" type="text" placeholder="Search.." />
                 <div ng-show="correction && query.length" class="correction">
                     Search for
@@ -33,7 +48,7 @@
                         <p ng-bind-html="hit.safeHighlights"></p>
                     </li>
                 </ul>
-            </div>
+            </nav>
         </aside>
 
         <div class="main" ng-view></div>
