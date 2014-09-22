@@ -23,7 +23,9 @@
             </nav>
             <nav ng-controller="TocCtrl" class="toc">
                 <ul>
-                    <li ng-repeat="heading in toc" class="level-{{heading.level}}">
+                    <li ng-repeat="heading in toc"
+                        ng-class="{'focus': heading.inFocus}"
+                        class="level-{{heading.level}}">
                         <a href="{{heading.url}}">{{heading.title}}</a>
                     </li>
                 </ul>

@@ -284,7 +284,8 @@
      *
      */
     exports.mdwiki.controller('TocCtrl',
-        ['$scope', '$rootScope', function ($scope, $rootScope)
+        ['$scope', '$rootScope', '$window',
+            function ($scope, $rootScope, $window)
     {
         $scope.toc = [];
 
@@ -295,12 +296,36 @@
                 var heading = ng.element(headings[i]);
                 var levelMatch = heading.prop('tagName').match(/\d+$/);
                 $scope.toc.push({
-                    url: baseUrl + '#' + heading.attr('id'),
-                    level: levelMatch ? parseInt(levelMatch[0]) : 7,
-                    title: heading.text()
+                    element : heading,
+                    url     : baseUrl + '#' + heading.attr('id'),
+                    level   : levelMatch ? parseInt(levelMatch[0]) : 7,
+                    title   : heading.text(),
+                    inFocus : i == 0
                 });
             }
         };
+
+        ng.element($window).on('scroll', function () {
+            var oldInFocus = null;
+            var newInFocus = null;
+            var pageYOffset = $window.pageYOffset;
+            ng.forEach($scope.toc, function (heading) {
+                var elemYOffset = heading.element[0].offsetTop;
+                heading.topDistance = Math.abs(elemYOffset - pageYOffset);
+                if (newInFocus == null
+                        || heading.topDistance < newInFocus.topDistance) {
+                    newInFocus = heading;
+                }
+                if (heading.inFocus) {
+                    oldInFocus = heading;
+                }
+                heading.inFocus = false;
+            });
+            newInFocus.inFocus = true;
+            if (newInFocus != oldInFocus) {
+                $scope.$apply();
+            }
+        });
 
         $rootScope.$on('fileOpened', function (evt, filename) {
             $scope.buildToc('#/' + filename);
