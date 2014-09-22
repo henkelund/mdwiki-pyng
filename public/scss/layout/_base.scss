@@ -13,12 +13,16 @@
 //------------------------------------------------------------------------------
 
 .topbar {
+    padding: $base-padding;
+    background-color: rgba($white, .8);
     position: fixed;
     top: 0;
     left: 250px;
     width: -moz-calc(100% - 250px);
     width: -webkit-calc(100% - 250px);
     width: calc(100% - 250px);
+
+    @include box-sizing(border-box);
 }
 
 //------------------------------------------------------------------------------
@@ -30,8 +34,9 @@
     top: 0;
     left: 0;
     width: 250px;
-    padding-top: 20px;
     bottom: 0;
+    background-color: $gray-lighter;
+    overflow: auto;
 }
 
 //------------------------------------------------------------------------------
@@ -44,7 +49,13 @@ nav.tree ul {
     margin: 0;
 
     li {
-        padding-left: 20px;
+        color: $gray-light;
+        padding-left: $base-padding;
+
+        > a {
+            color: $gray-light;
+            line-height: 30px;
+        }
 
         &.dir a {
             cursor: pointer;
@@ -52,15 +63,141 @@ nav.tree ul {
         &.closed ul {
             display: none;
         }
+
+        a:active,
+        &:active > i,
+        &.open > a,
+        &.open > i {
+            color: $black;
+        }
     }
+}
+
+nav.tree {
+    padding: $base-padding 0;
 }
 
 //------------------------------------------------------------------------------
 //  Search Navigation:
 //------------------------------------------------------------------------------
 
+aside.search {
+    padding: $base-padding;
+    position: fixed;
+    top: 10%;
+    left: 10%;
+    height: 500px;
+    width: 80%;
+    height: 80%;
+    right: auto;
+    border: 1px solid #efefef;
+    background-color: white;
+    overflow: auto;
+
+    @include box-sizing(border-box);
+}
+
 nav.search {
 
+    background-color: $gray-dark;
+
+    .search-header {
+        background-color: $gray-darker;
+        position: relative;
+
+        .icon-search {
+            position: absolute;
+            top: 18px;
+            left: 20px;
+            font-size: 26px;
+            pointer-events: none;
+            color: $white;
+        }
+
+        .icon-times-circle {
+            position: absolute;
+            right: 20px;
+            top: 25px;
+            font-size: 16px;
+            color: $white;
+            cursor: pointer;
+        }
+
+        input {
+            background-color: transparent;
+            border: 0;
+            color: $white;
+            margin: 0;
+            max-width: 100%;
+            padding: $base-padding 45px $base-padding 55px;
+            -webkit-appearance: none; // Remove iOS shadows
+            width: 100%;
+
+            @include box-sizing(border-box);
+            @include get-font('input', normal, true);
+            @include transition(border-color .2s ease, opacity .2s ease);
+
+            &:active,
+            &:focus,
+            &.is-active {
+                outline: 0;
+            }
+        }
+    }
+
+    .search-hits {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+
+        .search-hit {
+            > a {
+                display: block;
+                color: $white;
+                border-bottom: 1px solid $gray-darker;
+                padding: $base-padding;
+                background-color: transparent;
+
+                @include transition(background-color .3s ease);
+
+                &:hover {
+                    background-color: $black;
+                }
+            }
+
+            .search-hit-title {
+                word-wrap: break-word;
+                font-weight: bold;
+
+                i {
+                    padding-right: $base-padding / 2;
+                }
+            }
+
+            .search-hit-highlight {
+                word-wrap: break-word;
+                margin: 0;
+                @include get-font-size(small);
+            }
+        }
+    }
+}
+
+.correction {
+    padding: ($base-padding / 2) $base-padding;
+    color: $white;
+    background-color: transparent;
+
+    @include transition(background-color .3s ease);
+
+    a {
+        color: $white;
+    }
+
+    &:hover {
+        background-color: $black;
+        cursor: pointer;
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -102,6 +239,8 @@ nav.toc {
 //------------------------------------------------------------------------------
 
 .main {
+    padding: $base-padding;
+    padding-top: 64px; // topbar height
     margin-left: 250px;
 }
 

@@ -31,23 +31,31 @@
         </header>
 
         <aside class="sidebar">
+            <nav ng-controller="SearchCtrl" class="search">
+                <div class="search-header">
+                    <i class="icon icon-search"></i>
+                    <i class="icon icon-times-circle" ng-show="query.length" ng-click="query = ''"></i>
+                    <input ng-model="query" ng-change="search(query)" type="text" class="full-width" />
+                    <div ng-show="correction && query.length" class="correction" ng-click="query = correction; search(query)">
+                        Search for
+                        <a href="javascript:void(0)" ng-bind-html="safeCorrection"></a>
+                    </div>
+                </div>
+                <ul class="search-hits" ng-show="query.length >= minQueryLength">
+                    <li class="search-hit" ng-repeat="hit in hits">
+                        <a href="#{{hit.file}}">
+                            <span class="search-hit-title">
+                                <i class="icon icon-file-text-o"></i>{{hit.title}}
+                            </span>
+                            <p class="search-hit-highlight" ng-bind-html="hit.safeHighlights"></p>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
             <nav ng-controller="TreeCtrl" class="tree">
                 <tree node="root" on-toggle-open="toggleOpen(dir, parent)" toggle-open-fn="toggleOpen">
                     <span>{{node.basename}}</span>
                 </tree>
-            </nav>
-            <nav ng-controller="SearchCtrl" class="search">
-                <input ng-model="query" ng-change="search(query)" type="text" placeholder="Search.." />
-                <div ng-show="correction && query.length" class="correction">
-                    Search for
-                    <a href="javascript:void(0)" ng-click="query = correction; search(query)" ng-bind-html="safeCorrection"></a>
-                </div>
-                <ul ng-show="query.length >= minQueryLength">
-                    <li ng-repeat="hit in hits">
-                        <a href="#{{hit.file}}">{{hit.title}}</a>
-                        <p ng-bind-html="hit.safeHighlights"></p>
-                    </li>
-                </ul>
             </nav>
         </aside>
 

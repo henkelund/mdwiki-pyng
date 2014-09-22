@@ -9,43 +9,6 @@
 // =============================================================================
 
 // -----------------------------------------------------------------------------
-//  Custom Fonts:
-// -----------------------------------------------------------------------------
-
-@font-face {
-    font-family: 'Cantarell';
-    font-style: normal;
-    font-weight: 400;
-    src:
-        url('font/Cantarell/Cantarell-Regular.woff') format('woff'),
-        url('font/Cantarell/Cantarell-Regular.ttf') format('truetype');
-}
-@font-face {
-    font-family: 'Cantarell';
-    font-style: normal;
-    font-weight: 700;
-    src:
-        url('font/Cantarell/Cantarell-Bold.woff') format('woff'),
-        url('font/Cantarell/Cantarell-Bold.ttf') format('truetype');
-}
-@font-face {
-    font-family: 'Cantarell';
-    font-style: italic;
-    font-weight: 400;
-    src:
-        url('font/Cantarell/Cantarell-Oblique.woff') format('woff'),
-        url('font/Cantarell/Cantarell-Oblique.ttf') format('truetype');
-}
-@font-face {
-    font-family: 'Cantarell';
-    font-style: italic;
-    font-weight: 700;
-    src:
-        url('font/Cantarell/Cantarell-BoldOblique.woff') format('woff'),
-        url('font/Cantarell/Cantarell-BoldOblique.ttf') format('truetype');
-}
-
-// -----------------------------------------------------------------------------
 //  Resets and Standards:
 // -----------------------------------------------------------------------------
 
@@ -96,6 +59,8 @@ a {
 h1, h2, h3, h4, h5, h6 {
     color: $font-heading-color;
     line-height: 1.2em;
+    padding-bottom: .5em;
+    border-bottom: 1px solid $color-border;
 
     @include get-font('heading');
 }
@@ -182,6 +147,7 @@ pre {
     white-space: pre;
     white-space: pre-wrap;
     word-wrap: break-word;
+    padding: 20px;
 }
 kbd,
 pre,
