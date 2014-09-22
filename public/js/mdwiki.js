@@ -129,23 +129,32 @@
 
         // Function for recursively opening a path
         $scope.openPath = function (path, parent) {
+            var deferred = $q.defer();
             if (parent === undefined) {
                 parent = $scope.root;
             }
             var segments = path.split('/');
             var segment = segments.shift();
             if (segment == '') {
-                return;
+                deferred.resolve(parent);
+                return deferred.promise;
             }
             if (parent.subdirs !== undefined
                     && parent.subdirs[segment] !== undefined) {
                 parent.subdirs[segment].isOpen = true;
-                $scope.openPath(segments.join('/'), parent.subdirs[segment]);
+                $scope.openPath(segments.join('/'), parent.subdirs[segment])
+                    .then(function (leaf) {
+                        deferred.resolve(leaf);
+                    });
             } else {
                 $scope.open(segment, parent).then(function (node) {
-                    $scope.openPath(segments.join('/'), node);
+                    $scope.openPath(segments.join('/'), node)
+                        .then(function (leaf) {
+                            deferred.resolve(leaf);
+                        });
                 });
             }
+            return deferred.promise;
         }
 
         // Function called from tree directive to expand / collapse directories
@@ -163,6 +172,21 @@
             }
         };
 
+        // Check if a node is in the current path (for 'active' class name)
+        $scope.isActive = function (basename, parent)
+        {
+            if ($scope.currentFile === undefined) {
+                return false;
+            }
+            var pathRegExp = new RegExp(
+                '^' +
+                (parent.path + '/' + basename)
+                    .replace(/([.?*+^$[\]\\(){}|-])/g, '\\$1') +
+                '(/|$)'
+            );
+            return pathRegExp.test($scope.currentFile);
+        };
+
         // Load root directory
         $scope.open('').then(function () {
             // Subscribe to file load event once root dir has opened
@@ -171,7 +195,10 @@
                     filename
                         .replace(/(^|\/)[^\/]+$/, '') // trim basename
                         .replace(/^\//, '')           // and leading slash
-                );
+                ).then(function (leaf) {
+                    // Update the current file path once it's fully opened
+                    $scope.currentFile = '/' + filename;
+                });
             });
         });
 
@@ -294,7 +321,8 @@
             scope: {
                 node         : '=',
                 onToggleOpen : '&',
-                toggleOpenFn : '='
+                toggleOpenFn : '=',
+                isActiveFn   : '='
             },
             compile: function(tElem, tAttr, transclude) {
                 var contents = tElem.contents().remove();

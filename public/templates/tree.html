@@ -1,12 +1,19 @@
 <ul>
-    <li ng-repeat="dir in node.contents[0]" ng-class="node.subdirs[dir].isOpen ? 'open' : 'closed'" class="dir">
+    <li ng-repeat="dir in node.contents[0]"
+        ng-class="{'active': isActiveFn(dir, node), 'closed': !node.subdirs[dir].isOpen}"
+        class="dir">
         <i class="icon" ng-class="node.subdirs[dir].isOpen ? 'icon-folder-open-o' : 'icon-folder-o'"></i>
         <a ng-click="onToggleOpen({dir: dir, parent: node})">{{dir}}</a>
-        <tree node="node.subdirs[dir]" on-toggle-open="toggleOpenFn(dir, parent)" toggle-open-fn="toggleOpenFn">
+        <tree node="node.subdirs[dir]"
+              on-toggle-open="toggleOpenFn(dir, parent)"
+              toggle-open-fn="toggleOpenFn"
+              is-active-fn="isActiveFn">
             <div ng-transclude></div>
         </tree>
     </li>
-    <li ng-repeat="file in node.contents[1]" class="file">
+    <li ng-repeat="file in node.contents[1]"
+        ng-class="{'active': isActiveFn(file, node)}"
+        class="file">
         <i class="icon icon-file-text-o"></i>
         <a href="#{{node.path}}/{{file}}">{{file|stripExtension}}</a>
     </li>
