@@ -321,7 +321,9 @@
                 }
                 heading.inFocus = false;
             });
-            newInFocus.inFocus = true;
+            if (newInFocus !== null) {
+                newInFocus.inFocus = true;
+            }
             if (newInFocus != oldInFocus) {
                 $scope.$apply();
             }
