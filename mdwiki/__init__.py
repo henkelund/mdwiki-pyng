@@ -29,8 +29,7 @@ class Dispatcher(object):
 
     def file_action(self, path=''):
         """File controller"""
-        doc = Factory.get_mddoc(path)
-        return jsonify(doc.as_dict())
+        return jsonify(Factory.get_mddoc_data(path, True))
 
     def search_action(self, query):
         """Search controller"""
