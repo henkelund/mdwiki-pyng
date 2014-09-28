@@ -3,7 +3,7 @@
 """Document module"""
 
 from os import walk, sep as pathsep
-from os.path import isfile, isdir, dirname, basename
+from os.path import isfile, isdir, dirname, basename, exists
 import re
 
 __author__ = 'Henrik Hedelund'
@@ -35,15 +35,16 @@ class Document:
 
     def set_filename(self, filename):
         """Set the file name of this document"""
-        if self._file_pattern is None \
+        if not exists(filename):
+            self._filename = None
+            self._errors.append('File not found: %s' % filename)
+        elif self._file_pattern is None \
                 or self._file_pattern.search(filename) \
                 or isdir(filename):
             self._filename = filename.rstrip(pathsep)
         else:
             self._filename = None
-            self._errors.append(
-                'Unsupported file type: %s' \
-                    % basename(filename))
+            self._errors.append('Unsupported file type: %s' % filename)
         return self
 
     def get_filename(self):

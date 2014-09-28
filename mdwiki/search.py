@@ -18,7 +18,6 @@ __license__ = 'AGPL 3'
 __email__ = 'henke.hedelund@gmail.com'
 
 index_dir = os.path.join('var', 'index')
-index_name = 'mdwiki'
 
 class CaptureRenderer(m.BaseRenderer):
     """Markdown renderer for capturing high-weight content"""
@@ -51,18 +50,22 @@ class CaptureRenderer(m.BaseRenderer):
 class MarkdownIndexer:
     """Markdown document indexer class"""
 
+    def __init__(self, index_name='mdwiki'):
+        """Initialize indexer"""
+        self._index_name = index_name
+
     def get_index(self, clear=False):
         """Retrieve (and create if needed) index instance"""
         if not os.path.isdir(index_dir):
             os.makedirs(index_dir, 0777)
-        if not whoosh.index.exists_in(index_dir, index_name) or clear:
+        if not whoosh.index.exists_in(index_dir, self._index_name) or clear:
             return whoosh.index.create_in(
                 index_dir,
                 self.get_schema(),
-                index_name
+                self._index_name
             )
         else:
-            return whoosh.index.open_dir(index_dir, index_name)
+            return whoosh.index.open_dir(index_dir, self._index_name)
 
     def get_schema(self):
         """Retrieve index definition"""
@@ -147,7 +150,8 @@ class MarkdownSearcher:
 
     def __init__(self, **kwargs):
         """Initialize index instance"""
-        self._index = MarkdownIndexer().get_index()
+        self._index = MarkdownIndexer(kwargs['index']).get_index() \
+            if 'index' in kwargs else MarkdownIndexer().get_index()
         self._base_path = kwargs['base_path'] \
             if 'base_path' in kwargs else None
         self._default_limit = kwargs['default_limit'] \
