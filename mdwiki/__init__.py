@@ -4,12 +4,12 @@
 
 from flask import jsonify
 from factory import Factory
+from auth import requires_auth
 
 __author__ = 'Henrik Hedelund'
 __copyright__ = 'Copyright 2014, Henrik Hedelund'
 __license__ = 'AGPL 3'
 __email__ = 'henke.hedelund@gmail.com'
-
 
 class Dispatcher(object):
     """Application dispatcher class"""
@@ -27,10 +27,12 @@ class Dispatcher(object):
         for rule, endpoint in self._routes:
             app.add_url_rule(rule, endpoint, getattr(self, endpoint))
 
+    @requires_auth
     def file_action(self, path=''):
         """File controller"""
         return jsonify(Factory.get_mddoc_data(path, True))
 
+    @requires_auth
     def search_action(self, query):
         """Search controller"""
         searcher = Factory.get_searcher()
