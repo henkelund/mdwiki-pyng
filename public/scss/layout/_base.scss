@@ -52,6 +52,11 @@ nav.tree ul {
         color: $gray-light;
         padding-left: $base-padding;
 
+        a,
+        i {
+            @include transition(color .4s ease);
+        }
+
         > a {
             color: $gray-light;
             line-height: 30px;
@@ -64,11 +69,24 @@ nav.tree ul {
             display: none;
         }
 
-        a:active,
-        &:active > i,
-        &.open > a,
-        &.open > i {
-            color: $black;
+        &.active {
+            > i {
+                color: $black;
+            }
+
+            > a {
+                color: $black;
+            }
+        }
+
+        &:hover {
+            > i {
+                color: $color-1;
+            }
+
+            > a {
+                color: $color-1;
+            }
         }
     }
 }
@@ -229,8 +247,81 @@ nav.toc {
     float: right;
 
     ul {
-        padding: 0;
+        border: 1px solid $gray-lighter;
+        line-height: 1em;
         margin: 0;
+        overflow: hidden;
+        padding: 0;
+        position: relative;
+        width: 300px;
+
+        @include box-sizing(border-box);
+        @include transition(border-color .3s ease);
+
+        &:after {
+            @extend %icon;
+            @extend %icon-angle-down:before;
+
+            color: $gray-lighter;
+            position: absolute;
+            right: 10px;
+            top: 10px;
+
+            @include transition(color .3s ease);
+        }
+
+        > li {
+            position: absolute;
+            top: 0;
+
+            @include opacity(0);
+            @include transition(opacity .3s ease);
+
+            &:first-child {
+                position: static;
+            }
+
+            &.focus {
+                @include opacity(1);
+            }
+
+            > a {
+                display: block;
+                padding: $base-padding / 2;
+            }
+        }
+
+        // Hover:
+        &:hover {
+            position: absolute;
+            background-color: $white;
+            border-color: $black;
+            height: auto;
+            padding: 0;
+
+            &:after {
+                color: $black;
+            }
+
+            > li {
+                position: static;
+
+                @include opacity(1);
+
+                > a {
+                    border-top: 1px solid $color-border;
+                }
+
+                &:first-child > a {
+                    border-top: 0;
+                }
+
+                &.level-1 > a { }
+                &.level-2 > a { padding-left: 30px; }
+                &.level-3 > a { padding-left: 50px; }
+                &.level-4 > a { padding-left: 70px; }
+            }
+        }
     }
 }
 
